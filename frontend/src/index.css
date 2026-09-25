@@ -1,0 +1,495 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+:root {
+  /* ── 背景 ── */
+  --bg-primary: #f8f9fa;
+  --bg-card: #ffffff;
+  --bg-elevated: #f5f5f8; /* 悬浮/次级卡片底 */
+
+  /* ── 文字 ── */
+  --text-primary: #1a1a2e;
+  --text-secondary: #3a3a4e;
+  --text-muted: #4a4a5e;
+
+  /* ── 主色调（紫） ── */
+  --accent-1: #6c5ce7;
+  --accent-1-light: #8b7cf7;       /* 渐变亮端 */
+  --accent-1-hover: #5a4bd6;       /* 加深 */
+  --accent-1-soft: rgba(108, 92, 231, 0.1);        /* 浅紫底 */
+  --accent-1-soft-strong: rgba(108, 92, 231, 0.15); /* 略深紫底 */
+  --accent-1-border: rgba(108, 92, 231, 0.3);       /* 紫描边 */
+
+  /* ── 辅色调（青） ── */
+  --accent-2: #00cec9;
+  --accent-2-hover: #00b894;       /* 加深 */
+  --accent-2-soft: rgba(0, 206, 201, 0.15); /* 浅青底 */
+
+  /* ── 危险色（红） ── */
+  --danger: #e74c3c;
+  --danger-hover: #c0392b;
+  --danger-soft: rgba(231, 76, 60, 0.1);        /* 浅红底 */
+  --danger-soft-strong: rgba(231, 76, 60, 0.15); /* 略深红底 */
+  --danger-border: rgba(231, 76, 60, 0.3);       /* 红描边 */
+
+  /* ── 中性色 ── */
+  --white: #ffffff;
+  --border-color: #e2e2ef;
+  --neutral-soft: #e8e8e8;        /* 次级按钮底 */
+  --neutral-soft-hover: #d0d0d0;  /* 次级按钮 hover */
+  --overlay: rgba(0, 0, 0, 0.5);  /* 弹窗遮罩 */
+
+  /* ── 光晕 ── */
+  --glow-accent: rgba(108, 92, 231, 0.08);
+  --glow-accent-strong: rgba(108, 92, 231, 0.4);
+  --glow-cyan: rgba(0, 206, 201, 0.06);
+  --glow-cyan-strong: rgba(0, 206, 201, 0.4);
+
+  --progress-gradient: linear-gradient(90deg, #6c5ce7, #00cec9);
+
+  --max-width: 1200px;
+
+  /* ── GitHub 高亮主题（浅色，github.css 取色） ── */
+  --hljs-keyword: #d73a49;
+  --hljs-title: #6f42c1;
+  --hljs-const: #005cc5;
+  --hljs-string: #032f62;
+  --hljs-builtin: #e36209;
+  --hljs-comment: #6a737d;
+  --hljs-tag: #22863a;
+  --hljs-bullet: #735c0f;
+  --hljs-add: #22863a;
+  --hljs-add-bg: #f0fff4;
+  --hljs-del: #b31d28;
+  --hljs-del-bg: #ffeef0;
+  --hljs-text: #24292e;
+}
+
+/* ── 黑夜模式（手动选择 data-theme="dark" 时生效） ──
+   同步维护：下方 @media 中的同组变量须与此一致 */
+:root[data-theme='dark'] {
+  --bg-primary: #0f1014;
+  --bg-card: #1a1b22;
+  --bg-elevated: #23242e;
+  --text-primary: #e8e8f0;
+  --text-secondary: #b0b2c0;
+  --text-muted: #7a7c8c;
+  --accent-1: #7c6cf0;
+  --accent-1-light: #9d8ffa;
+  --accent-1-hover: #8a7bf5;
+  --accent-1-soft: rgba(124, 108, 240, 0.2);
+  --accent-1-soft-strong: rgba(124, 108, 240, 0.28);
+  --accent-1-border: rgba(124, 108, 240, 0.45);
+  --accent-2: #2ee6e0;
+  --accent-2-hover: #3af0c0;
+  --accent-2-soft: rgba(46, 230, 224, 0.22);
+  --danger: #e0503f;
+  --danger-hover: #ef6a55;
+  --danger-soft: rgba(240, 106, 88, 0.18);
+  --danger-soft-strong: rgba(240, 106, 88, 0.26);
+  --danger-border: rgba(240, 106, 88, 0.45);
+  --white: #ffffff;
+  --border-color: #2e2f3a;
+  --neutral-soft: #33343f;
+  --neutral-soft-hover: #3d3e4b;
+  --overlay: rgba(0, 0, 0, 0.6);
+  --glow-accent: rgba(124, 108, 240, 0.15);
+  --glow-accent-strong: rgba(124, 108, 240, 0.5);
+  --glow-cyan: rgba(46, 230, 224, 0.1);
+  --glow-cyan-strong: rgba(46, 230, 224, 0.5);
+  --progress-gradient: linear-gradient(90deg, #7c6cf0, #2ee6e0);
+  color-scheme: dark;
+
+  /* ── GitHub 高亮主题（深色，github-dark.css 取色） ── */
+  --hljs-keyword: #ff7b72;
+  --hljs-title: #d2a8ff;
+  --hljs-const: #79c0ff;
+  --hljs-string: #a5d6ff;
+  --hljs-builtin: #ffa657;
+  --hljs-comment: #8b949e;
+  --hljs-tag: #7ee787;
+  --hljs-bullet: #f2cc60;
+  --hljs-add: #aff5b4;
+  --hljs-add-bg: #033a16;
+  --hljs-del: #ffdcd7;
+  --hljs-del-bg: #67060c;
+  --hljs-text: #c9d1d9;
+}
+
+/* ── 跟随系统（系统为暗色且用户未强制浅色时生效） ── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg-primary: #0f1014;
+    --bg-card: #1a1b22;
+    --bg-elevated: #23242e;
+    --text-primary: #e8e8f0;
+    --text-secondary: #b0b2c0;
+    --text-muted: #7a7c8c;
+    --accent-1: #7c6cf0;
+    --accent-1-light: #9d8ffa;
+    --accent-1-hover: #8a7bf5;
+    --accent-1-soft: rgba(124, 108, 240, 0.2);
+    --accent-1-soft-strong: rgba(124, 108, 240, 0.28);
+    --accent-1-border: rgba(124, 108, 240, 0.45);
+    --accent-2: #2ee6e0;
+    --accent-2-hover: #3af0c0;
+    --accent-2-soft: rgba(46, 230, 224, 0.22);
+    --danger: #e0503f;
+    --danger-hover: #ef6a55;
+    --danger-soft: rgba(240, 106, 88, 0.18);
+    --danger-soft-strong: rgba(240, 106, 88, 0.26);
+    --danger-border: rgba(240, 106, 88, 0.45);
+    --white: #ffffff;
+    --border-color: #2e2f3a;
+    --neutral-soft: #33343f;
+    --neutral-soft-hover: #3d3e4b;
+    --overlay: rgba(0, 0, 0, 0.6);
+    --glow-accent: rgba(124, 108, 240, 0.15);
+    --glow-accent-strong: rgba(124, 108, 240, 0.5);
+    --glow-cyan: rgba(46, 230, 224, 0.1);
+    --glow-cyan-strong: rgba(46, 230, 224, 0.5);
+    --progress-gradient: linear-gradient(90deg, #7c6cf0, #2ee6e0);
+    color-scheme: dark;
+
+    --hljs-keyword: #ff7b72;
+    --hljs-title: #d2a8ff;
+    --hljs-const: #79c0ff;
+    --hljs-string: #a5d6ff;
+    --hljs-builtin: #ffa657;
+    --hljs-comment: #8b949e;
+    --hljs-tag: #7ee787;
+    --hljs-bullet: #f2cc60;
+    --hljs-add: #aff5b4;
+    --hljs-add-bg: #033a16;
+    --hljs-del: #ffdcd7;
+    --hljs-del-bg: #67060c;
+    --hljs-text: #c9d1d9;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent-1);
+  color: var(--white);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* KaTeX：跟随主题文字色，深色模式下不出现固定黑色 */
+.katex {
+  color: inherit;
+}
+
+/* ---------- 代码块语言角标 + highlight.js 语法染色（全局，覆盖 4 处 .markdown-body 渲染点） ---------- */
+.markdown-body pre[data-lang] {
+  position: relative;
+  padding-top: 44px;
+}
+
+.markdown-body pre[data-lang]::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  text-transform: none;
+  user-select: none;
+}
+
+/* hljs token 配色：GitHub 主题（github.css / github-dark.css 取色，经 --hljs-* 变量跟随明暗） */
+.markdown-body code.hljs {
+  background: none;
+  color: var(--hljs-text);
+}
+.markdown-body .hljs-comment,
+.markdown-body .hljs-code,
+.markdown-body .hljs-formula {
+  color: var(--hljs-comment);
+  font-style: italic;
+}
+.markdown-body .hljs-keyword,
+.markdown-body .hljs-doctag,
+.markdown-body .hljs-template-tag,
+.markdown-body .hljs-template-variable,
+.markdown-body .hljs-type,
+.markdown-body .hljs-variable.language_ {
+  color: var(--hljs-keyword);
+}
+.markdown-body .hljs-title,
+.markdown-body .hljs-title.class_,
+.markdown-body .hljs-title.class_.inherited__,
+.markdown-body .hljs-title.function_ {
+  color: var(--hljs-title);
+}
+.markdown-body .hljs-attr,
+.markdown-body .hljs-attribute,
+.markdown-body .hljs-literal,
+.markdown-body .hljs-meta,
+.markdown-body .hljs-number,
+.markdown-body .hljs-operator,
+.markdown-body .hljs-variable,
+.markdown-body .hljs-selector-attr,
+.markdown-body .hljs-selector-class,
+.markdown-body .hljs-selector-id {
+  color: var(--hljs-const);
+}
+.markdown-body .hljs-regexp,
+.markdown-body .hljs-string,
+.markdown-body .hljs-meta .hljs-string {
+  color: var(--hljs-string);
+}
+.markdown-body .hljs-built_in,
+.markdown-body .hljs-symbol {
+  color: var(--hljs-builtin);
+}
+.markdown-body .hljs-name,
+.markdown-body .hljs-quote,
+.markdown-body .hljs-selector-tag,
+.markdown-body .hljs-selector-pseudo {
+  color: var(--hljs-tag);
+}
+.markdown-body .hljs-section {
+  color: var(--hljs-const);
+  font-weight: bold;
+}
+.markdown-body .hljs-bullet {
+  color: var(--hljs-bullet);
+}
+.markdown-body .hljs-subst {
+  color: var(--hljs-text);
+}
+.markdown-body .hljs-emphasis {
+  font-style: italic;
+}
+.markdown-body .hljs-strong {
+  font-weight: bold;
+}
+.markdown-body .hljs-addition {
+  color: var(--hljs-add);
+  background-color: var(--hljs-add-bg);
+}
+.markdown-body .hljs-deletion {
+  color: var(--hljs-del);
+  background-color: var(--hljs-del-bg);
+}
+
+/* ---------- 代码块复制按钮（悬停显示） ---------- */
+.md-code-block {
+  position: relative;
+}
+.md-code-copy {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--text-muted);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.markdown-body .md-code-block:hover .md-code-copy,
+.md-code-copy:focus-visible {
+  opacity: 1;
+}
+.md-code-copy:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-1-border);
+}
+.md-code-copy.copied {
+  color: var(--accent-2);
+  border-color: var(--accent-2);
+}
+
+/* 移动端点击优化：按钮不触发双击缩放 */
+button {
+  touch-action: manipulation;
+}
+/* ---------- 黄金模式（data-golden）---------- */
+[data-golden='1'] .btn-primary {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #d4a400, #f0c23a);
+  color: #3a2d00;
+  border: none;
+  box-shadow: 0 4px 16px rgba(212, 164, 0, 0.4);
+}
+[data-golden='1'] .btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(135deg, #f0c23a, #d4a400);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  mix-blend-mode: screen;
+}
+[data-golden='1'] .btn-primary:hover::before {
+  opacity: 1;
+}
+[data-golden='1'] .btn-primary > * {
+  position: relative;
+  z-index: 1;
+}
+[data-golden='1'] .btn-primary:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -45%;
+  width: 35%;
+  z-index: 1;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.9), transparent);
+  transform: skewX(-20deg);
+  mix-blend-mode: screen;
+  animation: golden-btn-shimmer 1.6s ease-in-out infinite;
+}
+@keyframes golden-btn-shimmer {
+  0% { left: -45%; }
+  100% { left: 110%; }
+}
+
+/* ---------- 黄金模式询问弹窗 / 计时器 ---------- */
+.golden-magic {
+  position: fixed;
+  left: 0;
+  top: 84px;
+  z-index: 950;
+  width: 260px;
+  padding: 16px 18px;
+  border-radius: 0 14px 14px 0;
+  background: linear-gradient(135deg, #f0c23a, #d4a400);
+  color: #3a2d00;
+  box-shadow: 0 8px 24px rgba(212, 164, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: golden-magic-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.golden-magic-active {
+  background: linear-gradient(135deg, #e8b400, #f6d158);
+}
+@keyframes golden-magic-in {
+  from {
+    transform: translateX(-110%);
+    opacity: 0.3;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.golden-magic-exit {
+  animation: golden-magic-out 0.9s ease forwards;
+}
+
+@keyframes golden-magic-out {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  40% {
+    opacity: 0; /* 文字先消失 */
+  }
+  100% {
+    transform: translateX(-110%);
+    opacity: 0; /* 弹窗向左滑出屏幕外 */
+  }
+}
+.golden-magic-title {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.golden-magic-timer {
+  font-size: 22px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+}
+.golden-magic-text {
+  font-size: 12px;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+.golden-magic-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.golden-magic-confirm {
+  padding: 6px 14px;
+  font-size: 13px;
+  background: #3a2d00;
+  color: #f0c23a;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.golden-magic-confirm:hover {
+  background: #4a3a08;
+}
+.golden-magic-cancel {
+  border: none;
+  background: transparent;
+  color: #4a3300;
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* ---------- 移动端 markdown：KaTeX 公式 / 代码块角标压缩 ---------- */
+@media (max-width: 768px) {
+  .markdown-body pre[data-lang] { padding-top: 34px; }
+  .markdown-body pre[data-lang]::before { top: 9px; left: 12px; font-size: 11px; }
+  .md-code-copy { top: 8px; right: 8px; }
+  .markdown-body pre { padding: 14px 12px; }
+  .markdown-body pre code { font-size: 13px; line-height: 1.55; }
+  .markdown-body .katex { font-size: 1.05em; }
+  .markdown-body .katex-display { margin: 12px 0; }
+  .markdown-body pre,
+  .markdown-body .katex-display { -webkit-overflow-scrolling: touch; }
+}

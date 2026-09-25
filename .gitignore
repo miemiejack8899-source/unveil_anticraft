@@ -1,0 +1,27 @@
+# 依赖
+node_modules/
+frontend/node_modules/
+
+# 构建输出
+dist/
+frontend/dist/
+
+# 本地环境（含数据库口令与 JWT 密钥）
+.env
+.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+backend/.venv/
+
+# 本地独立 MySQL 实例数据目录
+.mysql/
+
+# IDE / 系统
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
