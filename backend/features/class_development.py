@@ -269,34 +269,45 @@ def _serialize(record: ClassDevelopmentRecord) -> dict:
     }
 
 
-def _yes_no(value: Optional[bool]) -> str:
-    return "是" if value is True else "否" if value is False else "未填写"
+def _cn_date(value: date) -> str:
+    return f"{value.year}年{value.month}月{value.day}日"
 
 
-def _application(submitted: Optional[bool], submitted_on: Optional[date]) -> str:
+def _application_phrase(submitted: Optional[bool], submitted_on: Optional[date], label: str) -> list[str]:
+    """申请书的自然语言片段：是→「已提交X（+日期）」，否→「未提交X」，未填写→不输出"""
     if submitted is True:
-        return f"是（{submitted_on.isoformat()}）" if submitted_on else "是"
-    return "否" if submitted is False else "未填写"
+        parts = [f"已提交{label}"]
+        if submitted_on:
+            parts.append(f"{_cn_date(submitted_on)}提交")
+        return parts
+    if submitted is False:
+        return [f"未提交{label}"]
+    return []
 
 
 def development_text(record: ClassDevelopmentRecord) -> str:
-    """按团员分支汇总一段可读的“发展情况”文本，用于导出。"""
+    """按团员 / 群众分支，用自然语言汇总一段可读的“发展情况”，用于导出。"""
     if record.league_member is True:
-        parts = [
-            "团员",
-            f"入党积极分子：{_yes_no(record.party_activist)}",
-            f"推优：{_yes_no(record.recommended_for_party)}",
-            f"入党申请书：{_application(record.party_application_submitted, record.party_application_date)}",
-        ]
+        parts = ["团员"]
+        if record.party_activist is True:
+            parts.append("入党积极分子")
+        if record.recommended_for_party is True:
+            parts.append("已推优")
+        elif record.recommended_for_party is False:
+            parts.append("未推优")
+        parts += _application_phrase(
+            record.party_application_submitted, record.party_application_date, "入党申请书"
+        )
     elif record.league_member is False:
-        parts = [
-            "非团员",
-            f"入团积极分子：{_yes_no(record.league_activist)}",
-            f"入团申请书：{_application(record.league_application_submitted, record.league_application_date)}",
-        ]
+        parts = ["群众"]
+        if record.league_activist is True:
+            parts.append("入团积极分子")
+        parts += _application_phrase(
+            record.league_application_submitted, record.league_application_date, "入团申请书"
+        )
     else:
         return "未填写"
-    return "；".join(parts)
+    return "，".join(parts)
 
 
 def build_roster_xlsx(records: list[ClassDevelopmentRecord]) -> bytes:
