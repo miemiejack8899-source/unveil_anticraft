@@ -358,9 +358,11 @@ def _sheet_xml(rows: list[list[str]], widths: list[int]) -> str:
             for col_index, value in enumerate(row, 1)
         )
         body.append(f'<row r="{row_index}">{cells}</row>')
+    dimension = f"A1:{_column_letter(len(widths))}{len(rows)}"
     return (
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
         '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+        f'<dimension ref="{dimension}"/><sheetViews><sheetView workbookViewId="0"/></sheetViews>'
         f'<cols>{cols}</cols><sheetData>{"".join(body)}</sheetData></worksheet>'
     )
 
