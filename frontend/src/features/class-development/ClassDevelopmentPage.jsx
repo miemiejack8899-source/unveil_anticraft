@@ -527,7 +527,8 @@ export default function ClassDevelopmentPage() {
       document.body.appendChild(link)
       link.click()
       link.remove()
-      URL.revokeObjectURL(url)
+      // 立即撤销可能在部分浏览器里导致下载还没开始就被打断，延迟到下载真正触发后再回收
+      setTimeout(() => URL.revokeObjectURL(url), 1000)
       showToast('success', `已导出 ${selectedClass} 共 ${filteredRecords.length} 人的名单与发展情况。`)
     } catch (err) {
       showToast('error', err && err.message ? err.message : '网络连接失败，导出未完成。')
