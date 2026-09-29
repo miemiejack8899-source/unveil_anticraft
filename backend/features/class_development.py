@@ -299,96 +299,30 @@ def development_text(record: ClassDevelopmentRecord) -> str:
     return "；".join(parts)
 
 
-# ============================================
-# 最小 xlsx 写出（纯标准库，与读取侧同样不引入第三方依赖）
-# 单元格统一用 inlineStr，省去 sharedStrings 部件
-# ============================================
-
-_XLSX_CONTENT_TYPES = (
-    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-    '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
-    '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
-    '<Default Extension="xml" ContentType="application/xml"/>'
-    '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
-    '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
-    '</Types>'
-)
-
-_XLSX_ROOT_RELS = (
-    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
-    '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>'
-    '</Relationships>'
-)
-
-_XLSX_WORKBOOK_RELS = (
-    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
-    '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>'
-    '</Relationships>'
-)
-
-_XLSX_WORKBOOK = (
-    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-    '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" '
-    'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
-    '<sheets><sheet name="班级发展信息" sheetId="1" r:id="rId1"/></sheets>'
-    '</workbook>'
-)
-
-
-def _xml_text(value: object) -> str:
-    return (
-        str("" if value is None else value)
-        .replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-        .replace('"', "&quot;").replace("'", "&apos;")
-    )
-
-
-def _sheet_xml(rows: list[list[str]], widths: list[int]) -> str:
-    cols = "".join(
-        f'<col min="{i + 1}" max="{i + 1}" width="{width}" customWidth="1"/>'
-        for i, width in enumerate(widths)
-    )
-    body = []
-    for row_index, row in enumerate(rows, 1):
-        cells = "".join(
-            f'<c r="{_column_letter(col_index)}{row_index}" t="inlineStr">'
-            f'<is><t xml:space="preserve">{_xml_text(value)}</t></is></c>'
-            for col_index, value in enumerate(row, 1)
-        )
-        body.append(f'<row r="{row_index}">{cells}</row>')
-    dimension = f"A1:{_column_letter(len(widths))}{len(rows)}"
-    return (
-        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
-        f'<dimension ref="{dimension}"/><sheetViews><sheetView workbookViewId="0"/></sheetViews>'
-        f'<cols>{cols}</cols><sheetData>{"".join(body)}</sheetData></worksheet>'
-    )
-
-
-def _column_letter(index: int) -> str:
-    letters = ""
-    while index > 0:
-        index, remainder = divmod(index - 1, 26)
-        letters = chr(ord("A") + remainder) + letters
-    return letters
-
-
 def build_roster_xlsx(records: list[ClassDevelopmentRecord]) -> bytes:
-    rows = [["姓名", "班级", "学号", "发展情况"]]
-    rows += [
-        [record.name, record.class_name or "", record.student_id, development_text(record)]
-        for record in records
-    ]
-    sheet = _sheet_xml(rows, [14, 14, 16, 52])
+    """用 openpyxl 生成 .xlsx——对 Excel / WPS / Google Sheets 兼容性有保障，
+    取代早期纯手写 OOXML（WPS 因缺部件会打开空白）。"""
+    from openpyxl import Workbook
+    from openpyxl.styles import Font
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "班级发展信息"
+    headers = ["姓名", "班级", "学号", "发展情况"]
+    ws.append(headers)
+    for cell in ws[1]:
+        cell.font = Font(bold=True)
+    for record in records:
+        ws.append([
+            record.name,
+            record.class_name or "",
+            record.student_id,
+            development_text(record),
+        ])
+    for col, width in zip("ABCD", [14, 14, 16, 52]):
+        ws.column_dimensions[col].width = width
     buffer = BytesIO()
-    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
-        archive.writestr("[Content_Types].xml", _XLSX_CONTENT_TYPES)
-        archive.writestr("_rels/.rels", _XLSX_ROOT_RELS)
-        archive.writestr("xl/workbook.xml", _XLSX_WORKBOOK)
-        archive.writestr("xl/_rels/workbook.xml.rels", _XLSX_WORKBOOK_RELS)
-        archive.writestr("xl/worksheets/sheet1.xml", sheet)
+    wb.save(buffer)
     return buffer.getvalue()
 
 
